@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Scrabble</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src ="dictionary.js"> </script>
+
+<script type="text/javascript">
+
+//couldnt figure out how to reference external json sheet so i went the caveman route
+
+//var img = document.createElement('img');
+var score1 = 0;
+var score2 = 0;
+var score3 = 0;
+var score4 = 0;
+var score5 = 0;
+var score6 = 0;
+var score7 = 0;
+
+var stringHold = "       ";
+var random = 0;
+//console.log(score1 + score2 + score3 + score4 + score5 + score6 + score7);
+
+var unParseletters = {"pieces": [
+	{"letter":"A", "value":1,  "amount":9},
+	{"letter":"B", "value":3,  "amount":2},
+	{"letter":"C", "value":3,  "amount":2},
+	{"letter":"D", "value":2,  "amount":4},
+	{"letter":"E", "value":1,  "amount":12},
+	{"letter":"F", "value":4,  "amount":2},
+	{"letter":"G", "value":2,  "amount":3},
+	{"letter":"H", "value":4,  "amount":2},
+	{"letter":"I", "value":1,  "amount":9},
+	{"letter":"J", "value":8,  "amount":1},
+	{"letter":"K", "value":5,  "amount":1},
+	{"letter":"L", "value":1,  "amount":4},
+	{"letter":"M", "value":3,  "amount":2},
+	{"letter":"N", "value":1,  "amount":6},
+	{"letter":"O", "value":1,  "amount":8},
+	{"letter":"P", "value":3,  "amount":2},
+	{"letter":"Q", "value":10, "amount":1},
+	{"letter":"R", "value":1,  "amount":6},
+	{"letter":"S", "value":1,  "amount":4},
+	{"letter":"T", "value":1,  "amount":6},
+	{"letter":"U", "value":1,  "amount":4},
+	{"letter":"V", "value":4,  "amount":2},
+	{"letter":"W", "value":4,  "amount":2},
+	{"letter":"X", "value":8,  "amount":1},
+	{"letter":"Y", "value":4,  "amount":2},
+	{"letter":"Z", "value":10, "amount":1},
+	{"letter":"_", "value":0,  "amount":2}
+],
+"creator":"Ramon Meza"
+}
+
+var letters = JSON.parse(JSON.stringify(unParseletters));
+
+console.log(letters);
+console.log(letters.pieces[0].letter);
+
+
+function generate(){
+  for(let i = 0; i < 7; i++) {
+    //randomly pickout numbers and subtract them
+    var random = Math.floor(Math.random() * 27) + 64;
+    var hold = String.fromCharCode(random);
+    console.log(random);
+    console.log(String.fromCharCode(random));
+    img.src = 'tiles/Scrabble_Tile_' + hold + '.jpg';
+    //console.log(hold.amount);
+    if(hold.amount == 0){
+      //recalculate because its out you hooligan
+      random = Math.floor(Math.random() * 27) + 64;
+      hold = String.fromCharCode(random);
+      console.log(random);
+      console.log(String.fromCharCode(random));
+    }
+    //then we call the function to generate the image and we give it a letter in order to find the image in the our folder
+
+
+  }
+}
+
+function createimage(letter, letterValue){
+  // try to make a string that creates the picture of the tile and then we append to row
+  // var.letter, var.amount--, var.value
+  if(letter == "_") {
+    var img = document.createElement('img');
+    letter = "blank";
+    img.src = 'tiles/Scrabble_Tile_' + letter + '.jpg';
+    letter = "_";
+    img.id = letter;
+    img.alt = letterValue;
+    document.getElementById('row').appendChild(img);
+    $(function() {
+      $('#row > img').draggable()
+    });
+  }
+  else {
+    var img = document.createElement('img');
+    img.src = 'tiles/Scrabble_Tile_' + letter + '.jpg';
+    img.id = letter;
+    img.alt = letterValue;
+    document.getElementById('row').appendChild(img);
+    $(function() {
+      $('#row > img').draggable()
+    });
+  }
+}
+
+function calculateScore(current_word) {
+  $("#score").text(totalscore);
+  let tot_score = 0;
+  $("#word").text("Word: " + current_word);
+  for(let i = 0; i < current_word.length; i++){
+    if(i == 1 || i == 5 ){
+      tot_score +=2;
+    }
+    else {
+      tot_score += 1;
+    }
+  }
+  $("#score").text("Score: " + tot_score);
+}
+
+// This code was used from this page and it serves the purpose of
+function setCharAt(str,index,chr) {
+    if(index > str.length-1) return str;
+    return str.substring(0,index) + chr + str.substring(index+1);
+}
+//function isWord()
+$( document ).ready(function() {
+    //here we make the 7 spaces droppable
+    $( "#space1" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 0, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score1 = parseInt(ui.draggable.attr( 'alt' ));
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space2" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 1, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score2 = parseInt(ui.draggable.attr( 'alt' )) * 2;
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space3" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 2, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score3 = parseInt(ui.draggable.attr( 'alt' ));
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space4" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 3, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score4 = parseInt(ui.draggable.attr( 'alt' ));
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space5" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 4, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score5 = parseInt(ui.draggable.attr( 'alt' ));
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space6" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 5, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score6 = parseInt(ui.draggable.attr( 'alt' )) * 2;
+        console.log(score6);
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+    $( "#space7" ).droppable({
+      drop: function( event, ui ) {
+        $(this).droppable("disable");
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $(this)
+        });
+        stringHold = setCharAt(stringHold, 6, ui.draggable.attr( 'id' ));
+        console.log(stringHold);
+        score7 = parseInt(ui.draggable.attr( 'alt' ));
+        console.log(score7);
+        $("#word").text("Word: " + stringHold);
+        $("#score").text("Score: " + (score1 + score2 + score3 + score4 + score5 + score6 + score7));
+      }
+    });
+  });
+
+  $(function() {
+    $('#row > img').draggable({ revert: "invalid", snap: true, snapMode: "inner" });
+  });
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>Assignment 8</h1>
+  <h2>Scrabble</h2>
+</div>
+<div>
+  <ul id="Information">
+    <li id = "score">Score:</li>
+    <li id = "tiles-left">Tiles Left: </li>
+    <li id = "word">Word: </li>
+  </ul>
+</div>
+<div id="content">
+  <div id="board">
+    <div class = "basic" id = "space1"> </div>
+    <div class = "double" id = "space2"> </div>
+    <div class = "basic" id= "space3"> </div>
+    <div class = "basic" id = "space4"> </div>
+    <div class = "basic" id = "space5"> </div>
+    <div class = "double" id = "space6"> </div>
+    <div class = "basic" id = "space7"> </div>
+  </div>
+  <div id="row">
+  </div>
+</div>
+
+
+<div id ='tools'>
+  <button type="button">Start Over</button>
+  <button type="button">Next Word</button>
+</div>
+
+
+<script type="text/javascript">
+var img = document.createElement('img');
+for(let i = 0; i < 7; i++){
+  random = Math.floor(Math.random() * 27)
+  if(letters.pieces[random].letter == 0){
+    //recalculate because its of tiles
+    random = Math.floor(Math.random() * 27) + 64;
+    hold = String.fromCharCode(random);
+      hold = letters.pieces[random].letter;
+      createimage(hold, letters.pieces[random].value);
+      //console.log(random);
+      //console.log(String.fromCharCode(random));
+      letters.pieces[random].amount = letters.pieces[random].amount - 1;
+    }
+    else {
+      hold = letters.pieces[random].letter;
+      //console.log(random);
+      //console.log(String.fromCharCode(random));
+      createimage(hold, letters.pieces[random].value);
+      console.log(letters.pieces[random].value);
+    }
+  }
+  //var random = Math.floor(Math.random() * 27);
+  //var hold = letters.pieces[random].letter;
+  //console.log(random);
+  //console.log(String.fromCharCode(random));
+  //createimage(hold, letters.pieces[random].value);
+  //console.log(letters.pieces[random].value);
+  /*
+  console.log(hold.amount);
+  if(letters.pieces[random].amount == 0){
+    recalculate because its out you hooligan
+    random = Math.floor(Math.random() * 27) + 64;
+    hold = String.fromCharCode(random);
+    console.log(random);
+    console.log(String.fromCharCode(random));
+    if(letters.pieces[random].letter == 0){
+      //recalculate because its out you hooligan
+      random = Math.floor(Math.random() * 27) + 64;
+      hold = String.fromCharCode(random);
+      hold = letters.pieces[random].letter;
+      createimage(hold, letters.pieces[random].value);
+      //console.log(random);
+      //console.log(String.fromCharCode(random));
+    }
+    else {
+      hold = letters.pieces[random].letter;
+      //console.log(random);
+      //console.log(String.fromCharCode(random));
+      createimage(hold, letters.pieces[random].value);
+      console.log(letters.pieces[random].value);
+    }
+}
+*/
+/*$(function() {
+  $('#row > img').draggable({ revert: "invalid", snap: true, snapMode: "inner" });
+});
+*/
+var totalscore = "Score: " + 0;
+var totaltiles = "Tiles Left: " + 70;
+//var totalword = "Word: " + "yo";
+//$("#score").text(totalscore);
+$("#tiles-left").text(totaltiles);
+
+console.log(dict.includes("firefighter"));
+
+
+</script>
+
+</script>
+</body>
+</html>
