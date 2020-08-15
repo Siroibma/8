@@ -1,0 +1,11 @@
+Name: Ambioris Lora
+Assignment: 8(scrabble)
+
+What Works: 
+	1. I believe everything that is listed in the rubric is in my submission. 
+	2. It does the basic things like read the letter that was dropped, track the score of the letter and the graphics themselves are draggable.
+	3. It even does everything listed in the additional section like return if not dropped on a droppable and restricts the droppable to prevent spaces in the word
+What probably works
+	1. I was able to test the amount aspect of json object to prevent going over the amount of tiles but i wasnt able to indepth test it.
+what doesnt work
+	1. I ran out of time to implement the dictionary check.
